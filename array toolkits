@@ -1,0 +1,53 @@
+const readline = require("readline");
+
+const r1 = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout
+});
+
+function ask(question) {
+    return new Promise(resolve => r1.question(question, resolve));
+}
+
+async function arrayToolkit() {
+
+    let numbers = [];
+    let number;
+    let total = 0;
+
+    while (true) {
+        number = Number(await ask("Enter a number: "));
+
+        if (isNaN(number)) {
+            console.log("Enter a valid number.");
+            continue; // ask again
+        } else {
+            numbers.push(number);
+        }
+
+        // Calculate total and average
+        total = 0; // reset
+        for (let n of numbers) {
+            total += n;
+        }
+
+        let average = total / numbers.length;
+        console.log(`Numbers so far: [${numbers.join(", ")}]`);
+        console.log(`Average: ${average.toFixed(2)}`);
+
+        // Ask user if they want to continue
+        const more = await ask("Add another number? (yes/no): ");
+        if (more.toLowerCase() !== "yes") {
+            break;
+        }
+    }
+
+    r1.close();
+}
+
+async function main() {
+    await arrayToolkit();
+    console.log("Done with the arrayToolkit function.");
+}
+
+main();
