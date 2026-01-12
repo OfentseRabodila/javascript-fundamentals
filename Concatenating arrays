@@ -1,0 +1,79 @@
+// Importing readline.
+const readline = require("readline");
+
+const r1 = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout
+});
+
+// Helper function.
+function ask(question) {
+    return new Promise(resolve => r1.question(question, resolve));
+}
+
+// the function that does the work.
+async function get_input() {
+
+    // to fill in the first array
+    let qty = Number(await ask("How many numbers would you like to add in the first array? "));
+
+    if (isNaN(qty)) {
+        console.log("Enter a valid digit!");
+        return get_input();
+    }
+
+    // to fill in the second array.
+    let qty2 = Number(await ask("How many numbers would you like to add in the second array? "));
+
+    if (isNaN(qty2)) {
+        console.log("Enter a valid digit!");
+        return get_input();
+    }
+
+    let arr1 = [];
+    let arr2 = [];
+
+    // the loop for the first array
+    for (let i = 0; i < qty; i++) {
+        while (true) {
+            let number = Number(await ask(`Enter number ${i + 1} to array 1: `));
+            if (isNaN(number)) {
+                console.log("Enter a valid digit!");
+            } else {
+                arr1.push(number);
+                break;
+            }
+        }
+    }
+
+    // the loop for the second array.
+    for (let i = 0; i < qty2; i++) {
+        while (true) {
+            let number = Number(await ask(`Enter number ${i + 1} to array 2: `));
+            if (isNaN(number)) {
+                console.log("Enter a valid digit!");
+            } else {
+                arr2.push(number);
+                break;
+            }
+        }
+    }
+
+    // concatenating correctly
+    let new_arr = arr1.concat(arr2);
+
+    // removing duplicates
+    new_arr = new Set(new_arr);
+
+    console.log(new_arr);
+    r1.close();
+}
+
+// main function to run the input function.
+async function main() {
+    await get_input();
+    console.log("Done!");
+}
+
+// calling main()
+main();
