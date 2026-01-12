@@ -1,0 +1,83 @@
+//importing readline module for terminal input 
+ 
+const { resolve } = require("path"); 
+const readline = require("readline");
+
+const r1 = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout
+});
+
+// helper function for awaiting
+function ask(question) {
+    return new Promise(resolve => r1.question(question, resolve));
+}
+
+async function gradeAnalyzer() {
+    let grade;
+    let grades = [];
+    let year_grade;
+
+    // input loop
+    while (true) {
+        console.log("Enter cancel to cancel.");
+        grade = await ask("Enter grade: ");
+
+        if (grade.toLowerCase() === "cancel") {
+            console.log("\nDone taking grades.");
+            break;
+        }
+
+        grade = Number(grade);
+
+        if (Number.isNaN(grade) || grade < 0 || grade > 100) {
+            console.log("Enter a valid grade.");
+        } else {
+            grades.push(grade);
+        }
+    }
+
+    r1.close();
+
+    if (grades.length === 0) {
+        console.log("No grades entered.");
+        return;
+    }
+
+    // lowest and highest
+    let highest = Math.max(...grades);
+    let lowest = Math.min(...grades);
+
+    console.log(`Highest grade: ${highest}`);
+    console.log(`Lowest grade: ${lowest}`);
+
+    let total = 0;
+
+    for (let i of grades) {
+        total += i;
+    }
+
+    // average
+    let count = grades.length;
+    let average = total / count;
+
+    console.log(`Average: ${average.toFixed(2)}`);
+
+    // object
+    year_grade = {
+        count: count,
+        average: average,
+        highest: highest,
+        lowest: lowest
+    };
+
+    return year_grade;
+}
+
+async function main() {
+    await gradeAnalyzer().then(() => {
+        console.log("\nDone with the gradeAnalyzer() function.");
+    });
+}
+
+main();
