@@ -1,0 +1,55 @@
+// Importing readline.
+const readline = require("readline");
+
+const r1 = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout
+});
+
+// Helper function.
+function ask(question) {
+    return new Promise(resolve => r1.question(question, resolve));
+}
+
+// Pangram function
+async function isPangram() {
+
+    let pangram = false;
+
+    let strs = await ask("Enter a sentence: ");
+
+    if (strs.length === 0) {
+        console.log("Input is empty.");
+        r1.close();
+        return;
+    }
+
+    const letters = "abcdefghijklmnopqrstuvwxyz";
+
+    strs = strs.toLowerCase();
+
+    let total = 0;
+
+    for (let i = 0; i < letters.length; i++) {
+        if (strs.includes(letters[i])) {
+            total++;
+        }
+    }
+
+    if (total === 26) {
+        pangram = true;
+    }
+
+    r1.close();
+    return `It is ${pangram} that the string is a pangram.`;
+}
+
+async function main() {
+    const result = await isPangram();
+    if (result) {
+        console.log(result);
+    }
+    console.log("Done!");
+}
+
+main();
