@@ -1,0 +1,55 @@
+const readline = require("readline");
+
+const r1 = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout
+});
+
+function ask(question) {
+    return new Promise(resolve => r1.question(question, resolve));
+}
+
+// fizzbuzz function
+async function fizzBuzzPlus(max, factor1, factor2) {
+
+    // Max input
+    while (!max || max < 1 || max % 2 !== 0) {
+        max = Number(await ask("Enter max (must be >0 and divisible by 2): "));
+    }
+
+    // Factor 1 input
+    while (!factor1 || factor1 < 1) {
+        factor1 = Number(await ask("Enter factor1 (integer >1): "));
+    }
+
+    // Factor 2 input
+    while (!factor2 || factor2 < 1) {
+        factor2 = Number(await ask("Enter factor2 (integer >1): "));
+    }
+
+    let total = 0;
+
+    for (let i = 1; i <= max; i++) {
+        if (i % factor1 === 0 && i % factor2 === 0) {
+            total++;
+            console.log("FizzBuzz");
+        } else if (i % factor1 === 0) {
+            console.log("Fizz");
+        } else if (i % factor2 === 0) {
+            console.log("Buzz");
+        } else {
+            console.log(i);
+        }
+    }
+
+    console.log(`Total FizzBuzz: ${total}`);
+    r1.close();
+}
+
+async function main() {
+    let max, factor1, factor2;
+    await fizzBuzzPlus(max, factor1, factor2);
+    console.log("\nDone with the fizzbuzz function.");
+}
+
+main();
